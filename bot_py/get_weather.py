@@ -52,9 +52,7 @@ def fill_weather(eng):
         weather_obj = Weather(temperature=temperature, wind_speed=wind_speed, 
                             curr_weather=curr_weather, city_id=city_id)
         weather_obj_list.append(weather_obj)
-        # print(dumps(req.json(), indent=4))
 
-    print('1')
     print(weather_obj_list)
     session.add_all(weather_obj_list)
     session.commit()
@@ -63,5 +61,5 @@ def fill_weather(eng):
 engine = create_engine('sqlite:///weather.db')
 if __name__ == "__main__":
     Base.metadata.create_all(engine)
-    # fill_cities(engine)
+    fill_cities(engine)
     fill_weather(engine)
