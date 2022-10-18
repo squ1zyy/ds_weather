@@ -1,20 +1,11 @@
 import requests
-from sqlalchemy import create_engine, Column, Integer, String, ForeignKey, DateTime
-from sqlalchemy.orm import Session, relationship
-from json import dumps
-from sqlalchemy.ext.declarative import declarative_base
-from datetime import datetime
-
-Base = declarative_base()
-
-class City(Base):
-    __tablename__ = 'cities'
-    id = Column(Integer, primary_key=True)
-    name = Column(String(170), nullable=False)
+from sqlalchemy.orm import Session
+from db_main import City, Weather, engine
+from schedule import run_pending, every 
 
 
-def fill_cities(eng):
-    session = Session(bind=eng)
+def fill_cities():
+    session = Session(bind=engine)
     cities_list = ["Dnipro", "Kharkiv", "Lviv", "London"]
     cities_obj_list = [City(name=city_name) for city_name in cities_list]
     session.add_all(cities_obj_list)
@@ -22,19 +13,8 @@ def fill_cities(eng):
     return 'Success'
 
 
-class Weather(Base):
-    __tablename__ = 'weather_1'
-    id = Column(Integer, primary_key=True)
-    temperature = Column(String(4), nullable=False)
-    wind_speed = Column(String(10), nullable=False)
-    curr_weather = Column(String(10), nullable=False)
-    city = relationship("City")
-    city_id = Column(ForeignKey("cities.id"))
-    date = Column(DateTime(), default=datetime.now())
-
-
-def fill_weather(eng):
-    session = Session(bind=eng)
+def fill_weather():
+    session = Session(bind=engine)
     query = session.query(City)
     city_objects = query.all()
     weather_obj_list = []
@@ -53,13 +33,16 @@ def fill_weather(eng):
                             curr_weather=curr_weather, city_id=city_id)
         weather_obj_list.append(weather_obj)
 
+
     print(weather_obj_list)
     session.add_all(weather_obj_list)
     session.commit()
     return 'Success'
 
-engine = create_engine('sqlite:///weather.db')
-if __name__ == "__main__":
-    Base.metadata.create_all(engine)
-    fill_cities(engine)
-    fill_weather(engine)
+
+def main():
+    every(5).minutes.do(fill_weather(engine))
+    run_pending()
+
+if __name__ == '__main__':
+    every(5).minutes.do(main)

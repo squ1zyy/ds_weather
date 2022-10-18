@@ -1,7 +1,7 @@
 import discord 
 from discord.ext import commands
 from sqlalchemy.orm import Session
-from get_weather import engine, City
+from ..DataBase.db_main import engine, City, Weather
 from config import config
 
 intents = discord.Intents.default()
@@ -19,3 +19,7 @@ client = commands.Bot(command_prefix=config['prefix'], intents=intents)
 @client.command()
 async def hello(ctx):
     ctx.send(f"Hello")
+
+@client.command()
+async def help(ctx):
+    ctx.send(f"Now i don't do the help in this bot. Pls wait..")
