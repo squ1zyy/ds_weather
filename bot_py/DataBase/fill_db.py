@@ -25,12 +25,11 @@ def fill_weather():
                       'units': 'metric',
                       'q': city_name})
         print(city_name)
-        city_id = el.id
         temperature = req.json()['main']['temp']
         wind_speed = req.json()['wind']['speed']
         curr_weather = req.json()['weather'][0]['main']
         weather_obj = Weather(temperature=temperature, wind_speed=wind_speed, 
-                            curr_weather=curr_weather, city_id=city_id)
+                            curr_weather=curr_weather, city_name=city_name)
         weather_obj_list.append(weather_obj)
 
 
@@ -41,8 +40,10 @@ def fill_weather():
 
 
 def main():
-    every(5).minutes.do(fill_weather(engine))
-    run_pending()
+    every(1).minutes.do(fill_weather)
+    while True:
+        run_pending()
 
 if __name__ == '__main__':
-    every(5).minutes.do(main)
+    fill_cities()
+    main()

@@ -20,9 +20,9 @@ class Weather(Base):
     wind_speed = Column(String(10), nullable=False)
     curr_weather = Column(String(10), nullable=False)
     city = relationship("City")
-    city_id = Column(ForeignKey("cities.id"))
+    city_name = Column(ForeignKey("cities.name"))
     date = Column(DateTime(), default=datetime.now())
 
-engine = create_engine('sqlite:///weather.db')
+engine = create_engine('sqlite:///..//weather.db')
 if __name__ == "__main__":
     Base.metadata.create_all(engine)
