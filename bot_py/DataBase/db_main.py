@@ -23,6 +23,8 @@ class Weather(Base):
     city_name = Column(ForeignKey("cities.name"))
     date = Column(DateTime(), default=datetime.now())
 
+
 engine = create_engine('sqlite:///..//weather.db')
+
 if __name__ == "__main__":
     Base.metadata.create_all(engine)
