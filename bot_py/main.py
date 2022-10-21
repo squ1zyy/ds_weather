@@ -1,11 +1,15 @@
 import discord 
 from discord.ext import commands
+from sqlalchemy import create_engine
 from sqlalchemy.orm import Session
-from DataBase.db_main import engine, City, Weather
-from config import config
+from DataBase.db_main import Weather
+# from config import config
 
 intents = discord.Intents.default()
 intents.message_content = True
+
+
+engine = create_engine('sqlite:///weather.db')
 
 
 def get_city_from_db(city_name):
@@ -14,7 +18,7 @@ def get_city_from_db(city_name):
     for el in query:
         print(el.city_name)
 
-client = commands.Bot(command_prefix=config['prefix'], intents=intents)
+# client = commands.Bot(command_prefix=config['prefix'], intents=intents)
 
 get_city_from_db("Dnipro")
 
