@@ -39,11 +39,11 @@ def fill_weather():
     return 'Success'
 
 
-def main():
-    every(1).minutes.do(fill_weather)
-    while True:
-        run_pending()
+# def main():
+#     every(1).minutes.do(fill_weather)
+#     while True:
+#         run_pending()
 
 if __name__ == '__main__':
-    fill_cities()
-    main()
+    # fill_cities()
+    fill_weather()

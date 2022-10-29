@@ -1,6 +1,6 @@
 if __name__ == "__main__":
     with open("TOKEN.txt", "w") as file:
-        token = "5683699289:AAEzNmNLZcQZ_c8klXz-DB1Er5Ia82GvvzI"
+        token = ""
         file.write(token)
 
 
