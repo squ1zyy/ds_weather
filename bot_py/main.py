@@ -1,31 +1,23 @@
-import discord 
-from discord.ext import commands
 from sqlalchemy import create_engine
 from sqlalchemy.orm import Session
 from DataBase.db_main import Weather
-# from config import config
-
-intents = discord.Intents.default()
-intents.message_content = True
+from config import TOKEN
+from telebot import TeleBot
 
 
 engine = create_engine('sqlite:///weather.db')
+bot = TeleBot(TOKEN)
 
 
 def get_city_from_db(city_name):
     session = Session(bind = engine)
     query = session.query(Weather).filter(Weather.city_name == city_name)
     for el in query:
-        print(el.city_name)
+        print(f"{el.city_name}: {el.temperature}")
 
-# client = commands.Bot(command_prefix=config['prefix'], intents=intents)
 
-get_city_from_db("Dnipro")
+@bot.message_handler(commands=["start"])
+def hello(msg):
+    bot.send_message(msg.chat.id, "Hello")
 
-# @client.command()
-# async def hello(ctx):
-#     ctx.send(f"Hello")
-
-# @client.command()
-# async def help(ctx):
-#     ctx.send(f"Now i don't do the help in this bot. Pls wait..")
+bot.polling()
